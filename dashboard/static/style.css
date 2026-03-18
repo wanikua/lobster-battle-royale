@@ -287,6 +287,27 @@ body {
     font-size: 0.9em;
 }
 
+/* Alliances */
+.alliances-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.alliance-badge {
+    display: inline-block;
+    background: rgba(88, 166, 255, 0.15);
+    border: 1px solid var(--accent-blue);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 0.9em;
+}
+
 /* Connection Status */
 .connection-status {
     position: fixed;

@@ -75,6 +75,11 @@ class GameEngine:
         self.active_events: list[dict] = []  # 当前生效的随机事件
         self.phase_order = ["warmup", "elimination", "semifinal", "final"]
 
+        # 结盟系统
+        self.alliances: dict[str, dict] = {}  # key: "id1-id2" (小号在前), value: {expires, proposed_by}
+        self.alliance_duration = 300  # 结盟持续 5 分钟
+        self.max_alliances_per_lobster = 2  # 每只龙虾最多同时结盟 2 个
+
         # 初始化龙虾
         self._init_lobsters()
 
@@ -188,6 +193,10 @@ class GameEngine:
             return {"ok": False, "message": f"{target.emoji} {target.name} 已经被淘汰了"}
         if attacker_id == target_id:
             return {"ok": False, "message": "不能攻击自己！"}
+
+        # 检查结盟 - 盟友之间不能攻击（除非先背刺）
+        if self.are_allies(attacker_id, target_id):
+            return {"ok": False, "message": f"⚠️ {target.emoji} {target.name} 是你的盟友！先撕毁盟约才能攻击"}
 
         # 获取阶段倍率
         phase = self.get_current_phase()
@@ -315,6 +324,117 @@ class GameEngine:
 
         return {"ok": True, "event": event}
 
+    # ===== 结盟系统 =====
+
+    def _alliance_key(self, id1: int, id2: int) -> str:
+        return f"{min(id1, id2)}-{max(id1, id2)}"
+
+    def _count_alliances(self, lobster_id: int) -> int:
+        """计算某只龙虾当前的结盟数"""
+        self._cleanup_alliances()
+        count = 0
+        for key in self.alliances:
+            ids = key.split("-")
+            if str(lobster_id) in ids:
+                count += 1
+        return count
+
+    def _cleanup_alliances(self):
+        """清理过期结盟"""
+        now = time.time()
+        expired = [k for k, v in self.alliances.items() if v["expires"] <= now]
+        for k in expired:
+            ids = k.split("-")
+            l1 = self.lobsters.get(int(ids[0]))
+            l2 = self.lobsters.get(int(ids[1]))
+            if l1 and l2:
+                self.event_log.add(
+                    "alliance",
+                    source_id=int(ids[0]),
+                    target_id=int(ids[1]),
+                    message=f"🤝💔 {l1.emoji} {l1.name} 与 {l2.emoji} {l2.name} 的结盟到期，各奔东西"
+                )
+            del self.alliances[k]
+
+    def propose_alliance(self, proposer_id: int, target_id: int) -> dict:
+        """提议结盟"""
+        if not self.game_started or self.game_paused:
+            return {"ok": False, "message": "游戏未开始或暂停中"}
+
+        proposer = self.lobsters.get(proposer_id)
+        target = self.lobsters.get(target_id)
+
+        if not proposer or not target:
+            return {"ok": False, "message": "无效的龙虾 ID"}
+        if not proposer.alive or not target.alive:
+            return {"ok": False, "message": "已淘汰的龙虾不能结盟"}
+        if proposer_id == target_id:
+            return {"ok": False, "message": "不能和自己结盟"}
+
+        key = self._alliance_key(proposer_id, target_id)
+        if key in self.alliances:
+            return {"ok": False, "message": "已经是盟友了"}
+
+        if self._count_alliances(proposer_id) >= self.max_alliances_per_lobster:
+            return {"ok": False, "message": "结盟数已满（最多2个）"}
+        if self._count_alliances(target_id) >= self.max_alliances_per_lobster:
+            return {"ok": False, "message": "对方结盟数已满"}
+
+        # 自动接受结盟（简化流程）
+        self.alliances[key] = {
+            "expires": time.time() + self.alliance_duration,
+            "proposed_by": proposer_id,
+        }
+
+        self.event_log.add(
+            "alliance",
+            source_id=proposer_id,
+            target_id=target_id,
+            message=f"🤝 {proposer.emoji} {proposer.name} 与 {target.emoji} {target.name} 结盟！（持续 5 分钟）"
+        )
+
+        return {
+            "ok": True,
+            "message": f"结盟成功！持续 {self.alliance_duration} 秒",
+            "expires": self.alliances[key]["expires"],
+        }
+
+    def break_alliance(self, lobster_id: int, target_id: int) -> dict:
+        """背刺！主动断盟"""
+        key = self._alliance_key(lobster_id, target_id)
+        if key not in self.alliances:
+            return {"ok": False, "message": "没有这个盟约"}
+
+        del self.alliances[key]
+
+        l1 = self.lobsters.get(lobster_id)
+        l2 = self.lobsters.get(target_id)
+
+        self.event_log.add(
+            "alliance",
+            source_id=lobster_id,
+            target_id=target_id,
+            message=f"🗡️ {l1.emoji} {l1.name} 背刺了 {l2.emoji} {l2.name}！盟约撕毁！"
+        )
+
+        return {"ok": True, "message": "盟约已撕毁（背刺！）"}
+
+    def are_allies(self, id1: int, id2: int) -> bool:
+        """检查是否是盟友"""
+        self._cleanup_alliances()
+        return self._alliance_key(id1, id2) in self.alliances
+
+    def get_allies(self, lobster_id: int) -> list[int]:
+        """获取某只龙虾的盟友列表"""
+        self._cleanup_alliances()
+        allies = []
+        for key in self.alliances:
+            ids = key.split("-")
+            if str(lobster_id) in ids:
+                ally_id = int(ids[0]) if int(ids[1]) == lobster_id else int(ids[1])
+                allies.append(ally_id)
+        return allies
+
     def _clear_event(self, event_instance: dict):
         """清除过期事件"""
         if event_instance in self.active_events:
@@ -352,6 +472,15 @@ class GameEngine:
                         for i, l in enumerate(ranking)],
             "active_events": [{"name": e["name"], "description": e["description"]} for e in self.active_events],
             "recent_events": self.event_log.get_recent(20),
+            "alliances": [
+                {
+                    "lobster_1": int(k.split("-")[0]),
+                    "lobster_2": int(k.split("-")[1]),
+                    "expires_in": int(v["expires"] - time.time()),
+                }
+                for k, v in self.alliances.items()
+                if v["expires"] > time.time()
+            ],
         }
 
     def get_battlefield(self, lobster_id: int) -> dict:
@@ -372,9 +501,12 @@ class GameEngine:
                     "active_defense": l.active_defense,
                 })
 
+        my_allies = self.get_allies(lobster_id)
+
         return {
             "me": me.to_dict(),
             "enemies": enemies,
+            "allies": my_allies,
             "phase": self.get_current_phase(),
             "active_events": [e["name"] for e in self.active_events],
             "recent_events": self.event_log.get_recent(10),

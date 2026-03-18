@@ -129,6 +129,28 @@ class Lobster:
             logger.info(f"💭 理由: {decision.get('reasoning', '无')}")
             await self.defense_mod.set_defense(defense_type)
 
+        elif action == "ally":
+            target_id = decision.get("target_id")
+            if target_id:
+                logger.info(f"🤝 提议与 {target_id} 结盟")
+                logger.info(f"💭 理由: {decision.get('reasoning', '无')}")
+                async with httpx.AsyncClient(timeout=10) as client:
+                    await client.post(
+                        f"{self.referee_url}/alliance",
+                        json={"lobster_id": self.lobster_id, "target_id": target_id}
+                    )
+
+        elif action == "betray":
+            target_id = decision.get("target_id")
+            if target_id:
+                logger.info(f"🗡️ 背刺盟友 {target_id}！")
+                logger.info(f"💭 理由: {decision.get('reasoning', '无')}")
+                async with httpx.AsyncClient(timeout=10) as client:
+                    await client.post(
+                        f"{self.referee_url}/alliance/break",
+                        json={"lobster_id": self.lobster_id, "target_id": target_id}
+                    )
+
         elif action == "scout":
             logger.info(f"👀 侦察中...")
             logger.info(f"💭 理由: {decision.get('reasoning', '无')}")

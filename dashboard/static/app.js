@@ -52,6 +52,7 @@ function updateDashboard(data) {
     updateStatusBar(data);
     updateActiveEvents(data.active_events || []);
     updateLobsterGrid(data.lobsters || []);
+    updateAlliances(data.alliances || [], data.lobsters || []);
     updateRanking(data.ranking || []);
     updateEventLog(data.recent_events || []);
 }
@@ -126,6 +127,25 @@ function updateLobsterGrid(lobsters) {
                 <span class="stat">🛡️ ${l.active_defense || '无防御'}</span>
             </div>
         </div>`;
+    }).join('');
+}
+
+// 结盟关系
+function updateAlliances(alliances, lobsters) {
+    const container = document.getElementById('alliances');
+    if (!alliances || alliances.length === 0) {
+        container.innerHTML = '<span style="color: var(--text-secondary)">暂无结盟</span>';
+        return;
+    }
+    const lobsterMap = {};
+    lobsters.forEach(l => lobsterMap[l.id] = l);
+
+    container.innerHTML = alliances.map(a => {
+        const l1 = lobsterMap[a.lobster_1] || {};
+        const l2 = lobsterMap[a.lobster_2] || {};
+        const mins = Math.floor(a.expires_in / 60);
+        const secs = a.expires_in % 60;
+        return `<span class="alliance-badge">🤝 ${l1.emoji || ''} ${l1.name || a.lobster_1} ⟷ ${l2.emoji || ''} ${l2.name || a.lobster_2} (${mins}:${secs.toString().padStart(2,'0')})</span>`;
     }).join('');
 }
 

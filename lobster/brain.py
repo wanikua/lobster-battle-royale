@@ -126,7 +126,7 @@ class LobsterBrain:
 你需要根据当前战场状态，决定下一步行动。
 
 可选行动：
-1. attack - 攻击一只敌方龙虾
+1. attack - 攻击一只敌方龙虾（不能攻击盟友，需先背刺）
    攻击类型：
    - port_hijack（端口抢占，伤害10，成功率70%）
    - resource_drain（资源耗尽，伤害15，成功率50%）
@@ -146,10 +146,15 @@ class LobsterBrain:
 
 3. scout - 侦察（不行动，积累信息）
 
+4. ally - 向一只龙虾提议结盟（盟友之间不能互相攻击，持续5分钟，最多同时2个盟友）
+
+5. betray - 背刺盟友（撕毁盟约，之后可以攻击）
+
 请以 JSON 格式回复，不要有其他文字：
-{{"action": "attack/defend/scout", "target_id": 目标ID(攻击时), "attack_type": "类型(攻击时)", "defense_type": "类型(防御时)", "reasoning": "简短理由"}}"""
+{{"action": "attack/defend/scout/ally/betray", "target_id": 目标ID(攻击/结盟/背刺时), "attack_type": "类型(攻击时)", "defense_type": "类型(防御时)", "reasoning": "简短理由"}}"""
 
         # 格式化战场信息
+        allies = battlefield.get("allies", [])
         events_text = "\n".join([f"  - {e.get('message', '')}" for e in recent_events[-5:]]) if recent_events else "  无"
         enemies_text = "\n".join([
             f"  - [{e['emoji']}] {e['name']} (ID:{e['id']}) HP:{e['hp']} 击杀:{e['kills']} 防御:{e.get('active_defense', '无')}"
@@ -171,6 +176,9 @@ class LobsterBrain:
 
 【存活敌人】
 {enemies_text}
+
+【我的盟友】
+  {', '.join([str(a) for a in allies]) if allies else '无（可以用 ally 行动结盟）'}
 
 【当前事件】
   {', '.join(active_events) if active_events else '无'}

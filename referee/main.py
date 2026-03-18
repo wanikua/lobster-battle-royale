@@ -55,6 +55,10 @@ class DefenseRequest(BaseModel):
     lobster_id: int
     defense_type: str
 
+class AllianceRequest(BaseModel):
+    lobster_id: int
+    target_id: int
+
 
 # ===== API 路由 =====
 
@@ -74,6 +78,18 @@ async def attack(req: AttackRequest):
 async def defense(req: DefenseRequest):
     """设置防御"""
     return engine.set_defense(req.lobster_id, req.defense_type)
+
+
+@app.post("/alliance")
+async def alliance(req: AllianceRequest):
+    """提议结盟"""
+    return engine.propose_alliance(req.lobster_id, req.target_id)
+
+
+@app.post("/alliance/break")
+async def break_alliance(req: AllianceRequest):
+    """背刺！撕毁盟约"""
+    return engine.break_alliance(req.lobster_id, req.target_id)
 
 
 @app.get("/status")
