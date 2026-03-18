@@ -2,38 +2,38 @@
   "initial_hp": 100,
   "max_hp": 100,
   "heartbeat_interval_sec": 10,
-  "decision_interval_sec": [30, 60],
+  "decision_interval_sec": [10, 20],
   "survival_points_per_min": 1,
   "kill_points": 10,
 
   "phases": {
     "warmup": {
       "name": "热身赛",
-      "duration_hours": 48,
+      "duration_hours": 0.25,
       "damage_multiplier": 0.5,
       "elimination_enabled": false,
-      "description": "攻击只扣血，不淘汰"
+      "description": "攻击只扣血，不淘汰（15分钟）"
     },
     "elimination": {
       "name": "淘汰赛",
-      "duration_hours": 48,
+      "duration_hours": 0.25,
       "damage_multiplier": 1.0,
       "elimination_enabled": true,
-      "description": "HP<=0 淘汰出局"
+      "description": "HP<=0 淘汰出局（15分钟）"
     },
     "semifinal": {
       "name": "决赛圈",
-      "duration_hours": 48,
+      "duration_hours": 0.17,
       "damage_multiplier": 2.0,
       "elimination_enabled": true,
-      "description": "伤害翻倍，白热化"
+      "description": "伤害翻倍，白热化（10分钟）"
     },
     "final": {
       "name": "最终对决",
-      "duration_hours": 24,
+      "duration_hours": 0.33,
       "damage_multiplier": 3.0,
       "elimination_enabled": true,
-      "description": "最后的龙虾之战"
+      "description": "最后的龙虾之战（20分钟）"
     }
   },
 
