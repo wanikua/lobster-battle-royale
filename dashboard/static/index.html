@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦞 龙虾大乱斗 - 实时战况</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦞</text></svg>">
+</head>
+<body>
+    <div id="connection-status" class="connection-status disconnected">🔴 连接中...</div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🦞 龙虾大乱斗</h1>
+            <p class="subtitle">Lobster Battle Royale — 10 只 AI 龙虾的生死对决</p>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-card">
+                <div class="label">存活龙虾</div>
+                <div class="value alive" id="alive-count">0 / 10</div>
+            </div>
+            <div class="status-card">
+                <div class="label">当前阶段</div>
+                <div class="value phase" id="phase-name">等待开始</div>
+            </div>
+            <div class="status-card">
+                <div class="label">已进行</div>
+                <div class="value time" id="elapsed-time">0 分钟</div>
+            </div>
+            <div class="status-card">
+                <div class="label">状态</div>
+                <div class="value" id="game-status">等待开始</div>
+            </div>
+        </div>
+
+        <!-- Active Events -->
+        <div id="active-events" class="active-events"></div>
+
+        <!-- Lobster Grid -->
+        <h2 class="section-title">🦞 参赛龙虾</h2>
+        <div id="lobster-grid" class="lobster-grid">
+            <div class="lobster-card">
+                <div class="lobster-header">
+                    <span class="lobster-emoji">⏳</span>
+                    <div>
+                        <div class="lobster-name">加载中...</div>
+                        <div class="lobster-origin">等待连接</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ranking -->
+        <h2 class="section-title">🏆 积分排行</h2>
+        <table class="ranking-table">
+            <thead>
+                <tr>
+                    <th>排名</th>
+                    <th>龙虾</th>
+                    <th>积分</th>
+                    <th>击杀</th>
+                    <th>状态</th>
+                </tr>
+            </thead>
+            <tbody id="ranking-body">
+                <tr><td colspan="5" style="text-align:center; color: var(--text-secondary);">等待数据...</td></tr>
+            </tbody>
+        </table>
+
+        <!-- Event Log -->
+        <h2 class="section-title">📜 战斗日志</h2>
+        <div id="event-log" class="event-log">
+            <div class="event-item">
+                <span class="event-time">--:--:--</span>
+                <span class="event-message">等待游戏开始...</span>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; padding: 30px 0; color: var(--text-secondary); font-size: 0.85em;">
+            <p>🦞 龙虾大乱斗 — Lobster Battle Royale</p>
+            <p>纯技术实验 · Docker 隔离 · 代码开源</p>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

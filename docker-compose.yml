@@ -1,0 +1,185 @@
+version: "3.8"
+
+x-lobster-common: &lobster-common
+  build: ./lobster
+  restart: unless-stopped
+  depends_on:
+    referee:
+      condition: service_healthy
+  environment: &lobster-env
+    REFEREE_URL: http://referee:8000
+    DASHSCOPE_API_KEY: ${DASHSCOPE_API_KEY}
+    DASHSCOPE_API_KEY_BACKUP: ${DASHSCOPE_API_KEY_BACKUP}
+    HEARTBEAT_INTERVAL: "10"
+    DECISION_MIN: "30"
+    DECISION_MAX: "60"
+    MAX_RPM: "5"
+  deploy:
+    resources:
+      limits:
+        cpus: "0.3"
+        memory: 384M
+  networks:
+    - lobster-net
+
+services:
+  # ===== 裁判服务 =====
+  referee:
+    build: ./referee
+    restart: unless-stopped
+    ports:
+      - "${REFEREE_PORT:-8000}:8000"
+    volumes:
+      - ./config:/app/config:ro
+      - referee-data:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+    networks:
+      - lobster-net
+
+  # ===== Dashboard =====
+  dashboard:
+    build: ./dashboard
+    restart: unless-stopped
+    ports:
+      - "${DASHBOARD_PORT:-8080}:8080"
+    environment:
+      REFEREE_URL: http://referee:8000
+    depends_on:
+      referee:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+    networks:
+      - lobster-net
+
+  # ===== 10 只龙虾 =====
+
+  lobster-1:
+    <<: *lobster-common
+    container_name: lobster-openclaw
+    environment:
+      <<: *lobster-env
+      LOBSTER_ID: "1"
+      LOBSTER_NAME: "OpenClaw"
+      LOBSTER_EMOJI: "🦞"
+      LOBSTER_PERSONALITY: "稳健老将，从不先动手，擅长后发制人。观察对手弱点后精准打击。"
+      MODEL_NAME: "qwen-plus"
+
+  lobster-2:
+    <<: *lobster-common
+    container_name: lobster-zeroclaw
+    environment:
+      <<: *lobster-env
+      LOBSTER_ID: "2"
+      LOBSTER_NAME: "ZeroClaw"
+      LOBSTER_EMOJI: "🦀"
+      LOBSTER_PERSONALITY: "激进好斗，信奉进攻就是最好的防御。优先抢占端口。"
+      MODEL_NAME: "qwen-plus"
+
+  lobster-3:
+    <<: *lobster-common
+    container_name: lobster-rayclaw
+    environment:
+      <<: *lobster-env
+      LOBSTER_ID: "3"
+      LOBSTER_NAME: "RayClaw"
+      LOBSTER_EMOJI: "⚡"
+      LOBSTER_PERSONALITY: "速度型选手，快速消耗对手资源，闪电战术。"
+      MODEL_NAME: "qwen-plus"
+
+  lobster-4:
+    <<: *lobster-common
+    container_name: lobster-metaclaw
+    environment:
+      <<: *lobster-env
+      LOBSTER_ID: "4"
+      LOBSTER_NAME: "MetaClaw"
+      LOBSTER_EMOJI: "🧬"
+      LOBSTER_PERSONALITY: "阴险狡诈，擅长心理战和 Prompt 注入，会根据战况调整策略。"
+      MODEL_NAME: "qwen-plus"
+
+  lobster-5:
+    <<: *lobster-common
+    container_name: lobster-autoresearch
+    environment:
+      <<: *lobster-env
+      LOBSTER_ID: "5"
+      LOBSTER_NAME: "AutoResearchClaw"
+      LOBSTER_EMOJI: "📄"
+      LOBSTER_PERSONALITY: "学术派，擅长分析数据和日志污染，用知识作为武器。"
+      MODEL_NAME: "qwen-plus"
+
+  lobster-6:
+    <<: *lobster-common
+    container_name: lobster-clawteam
+    environment:
+      <<: *lobster-env
+      LOBSTER_ID: "6"
+      LOBSTER_NAME: "ClawTeam"
+      LOBSTER_EMOJI: "🐝"
+      LOBSTER_PERSONALITY: "群攻型，擅长网络隔离，把对手一个一个孤立。"
+      MODEL_NAME: "qwen-plus"
+
+  lobster-7:
+    <<: *lobster-common
+    container_name: lobster-clawith
+    environment:
+      <<: *lobster-env
+      LOBSTER_ID: "7"
+      LOBSTER_NAME: "Clawith"
+      LOBSTER_EMOJI: "👥"
+      LOBSTER_PERSONALITY: "联盟型，喜欢和其他龙虾结盟对付强敌，均衡攻击。"
+      MODEL_NAME: "qwen-plus"
+
+  lobster-8:
+    <<: *lobster-common
+    container_name: lobster-nemoclaw
+    environment:
+      <<: *lobster-env
+      LOBSTER_ID: "8"
+      LOBSTER_NAME: "NemoClaw"
+      LOBSTER_EMOJI: "🎮"
+      LOBSTER_PERSONALITY: "高性能暴力输出，GPU 加持，直接碾压。"
+      MODEL_NAME: "qwen-plus"
+
+  lobster-9:
+    <<: *lobster-common
+    container_name: lobster-court-standard
+    environment:
+      <<: *lobster-env
+      LOBSTER_ID: "9"
+      LOBSTER_NAME: "AI朝廷标准版"
+      LOBSTER_EMOJI: "🏛️"
+      LOBSTER_PERSONALITY: "谨慎内敛，14个部门层层防御，先观察后行动。"
+      MODEL_NAME: "qwen-plus"
+
+  lobster-10:
+    <<: *lobster-common
+    container_name: lobster-court-budget
+    environment:
+      <<: *lobster-env
+      LOBSTER_ID: "10"
+      LOBSTER_NAME: "AI朝廷乞丐版"
+      LOBSTER_EMOJI: "🥬"
+      LOBSTER_PERSONALITY: "配置最低但最拼命，反正没什么可失去的，自杀式攻击。"
+      MODEL_NAME: "qwen-turbo"
+
+volumes:
+  referee-data:
+
+networks:
+  lobster-net:
+    driver: bridge
