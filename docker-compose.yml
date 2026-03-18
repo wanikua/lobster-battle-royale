@@ -157,21 +157,10 @@ services:
 
   lobster-9:
     <<: *lobster-common
-    container_name: lobster-court-standard
-    environment:
-      <<: *lobster-env
-      LOBSTER_ID: "9"
-      LOBSTER_NAME: "AI朝廷标准版"
-      LOBSTER_EMOJI: "🏛️"
-      LOBSTER_PERSONALITY: "谨慎内敛，14个部门层层防御，先观察后行动。"
-      MODEL_NAME: "qwen-plus"
-
-  lobster-10:
-    <<: *lobster-common
     container_name: lobster-sunzi
     environment:
       <<: *lobster-env
-      LOBSTER_ID: "10"
+      LOBSTER_ID: "9"
       LOBSTER_NAME: "孙子兵法龙虾"
       LOBSTER_EMOJI: "📜"
       LOBSTER_PERSONALITY: "深谙孙子兵法十三篇的战略大师。知彼知己，百战不殆。善用奇正相生，速战速决。先为不可胜以待敌之可胜。攻其无备，出其不意。"

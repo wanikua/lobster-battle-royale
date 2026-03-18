@@ -92,7 +92,7 @@ class LobsterBrain:
 
         # 构建 prompt
         art_of_war_addition = ""
-        if self.lobster_id == 10:
+        if self.lobster_id == 9:
             art_of_war_addition = """
 【孙子兵法战略指导】
 

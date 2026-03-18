@@ -87,20 +87,10 @@
     "catchphrase": "算力即正义",
     "model": "qwen-plus"
   },
-  {
-    "id": 9,
-    "name": "AI朝廷标准版",
-    "emoji": "🏛️",
-    "origin": "boluobobo 自建",
-    "personality": "谨慎内敛，14个部门层层防御，先观察后行动。",
-    "attack_preference": "balanced",
-    "defense_style": "fortress",
-    "catchphrase": "14 部门不是摆设",
-    "model": "qwen-plus"
-  },
+
 
   {
-    "id": 10,
+    "id": 9,
     "name": "孙子兵法龙虾",
     "emoji": "📜",
     "origin": "OpenClaw + 孙子兵法 Skill",
