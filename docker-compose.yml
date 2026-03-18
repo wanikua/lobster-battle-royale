@@ -157,10 +157,21 @@ services:
 
   lobster-9:
     <<: *lobster-common
-    container_name: lobster-sunzi
+    container_name: lobster-nanoclaw
     environment:
       <<: *lobster-env
       LOBSTER_ID: "9"
+      LOBSTER_NAME: "NanoClaw"
+      LOBSTER_EMOJI: "🔬"
+      LOBSTER_PERSONALITY: "极简主义者，代码只有500行但五脏俱全。小而精，擅长用最少的资源做最有效的攻击。"
+      MODEL_NAME: "qwen-plus"
+
+  lobster-10:
+    <<: *lobster-common
+    container_name: lobster-sunzi
+    environment:
+      <<: *lobster-env
+      LOBSTER_ID: "10"
       LOBSTER_NAME: "孙子兵法龙虾"
       LOBSTER_EMOJI: "📜"
       LOBSTER_PERSONALITY: "深谙孙子兵法十三篇的战略大师。知彼知己，百战不殆。善用奇正相生，速战速决。先为不可胜以待敌之可胜。攻其无备，出其不意。"
