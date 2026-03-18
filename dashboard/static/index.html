@@ -44,17 +44,20 @@
         <!-- Active Events Banner -->
         <div id="active-events" class="events-banner"></div>
 
+        <!-- Circular Arena -->
+        <section class="section">
+            <h2 class="section-head">竞技场</h2>
+            <div class="colosseum-wrapper">
+                <canvas id="arena-canvas"></canvas>
+                <div id="arena-fighters"></div>
+            </div>
+        </section>
+
         <!-- Alliances -->
         <div id="alliances-section" class="alliances-section" style="display:none">
             <h2 class="section-head">当前结盟</h2>
             <div id="alliances" class="alliances-row"></div>
         </div>
-
-        <!-- Arena Grid - Lobster Cards -->
-        <section class="section">
-            <h2 class="section-head">竞技场</h2>
-            <div id="lobster-grid" class="arena-grid"></div>
-        </section>
 
         <!-- Leaderboard -->
         <section class="section">
@@ -68,7 +71,6 @@
             <div id="event-log" class="battle-log"></div>
         </section>
 
-        <!-- Footer -->
         <footer class="footer">
             <span>龙虾斗兽场</span>
             <span class="sep">·</span>
@@ -78,6 +80,7 @@
         </footer>
     </div>
 
+    <script src="/static/arena.js"></script>
     <script src="/static/app.js"></script>
 </body>
 </html>

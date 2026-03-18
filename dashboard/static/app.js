@@ -31,7 +31,11 @@ function updateDashboard(data) {
     updateStats(data);
     updateEvents(data.active_events || []);
     updateAlliances(data.alliances || [], data.lobsters || []);
-    updateGrid(data.lobsters || []);
+    // Update circular arena
+    if (typeof arena !== 'undefined' && arena) {
+        arena.setFighters(data.lobsters || []);
+        arena.processEvents(data.recent_events || []);
+    }
     updateLeaderboard(data.ranking || []);
     updateLog(data.recent_events || []);
 }
@@ -70,39 +74,6 @@ function updateAlliances(alliances, lobsters) {
             <span style="color:var(--text2)">⟷</span>
             <span>${l2.emoji || ''} ${l2.name || a.lobster_2}</span>
             <span class="timer">${mins}:${String(secs).padStart(2,'0')}</span>
-        </div>`;
-    }).join('');
-}
-
-function updateGrid(lobsters) {
-    const grid = document.getElementById('lobster-grid');
-    grid.innerHTML = lobsters.map(l => {
-        const pct = Math.round(l.hp / l.max_hp * 100);
-        const cls = !l.alive ? 'dead' : pct <= 20 ? 'critical' : pct <= 50 ? 'low' : '';
-        const hpCls = pct <= 20 ? 'critical' : pct <= 50 ? 'low' : '';
-        return `
-        <div class="fighter-card ${cls}">
-            <div class="fighter-top">
-                <div class="fighter-avatar">${l.emoji}</div>
-                <div class="fighter-info">
-                    <div class="fighter-name">${l.alive ? '' : '☠ '}${l.name}</div>
-                    <div class="fighter-origin">${l.origin}</div>
-                </div>
-                <span class="fighter-id">#${l.id}</span>
-            </div>
-            <div class="hp-label">
-                <span>HP</span>
-                <span class="hp-num">${l.alive ? l.hp + '/' + l.max_hp : '淘汰'}</span>
-            </div>
-            <div class="hp-track">
-                <div class="hp-fill ${hpCls}" style="width:${l.alive ? pct : 0}%"></div>
-            </div>
-            <div class="fighter-meta">
-                <span>击杀 <b>${l.kills}</b></span>
-                <span>积分 <b>${l.score}</b></span>
-                <span>${l.active_defense ? '防御: ' + l.active_defense : '无防御'}</span>
-            </div>
-            ${l.catchphrase ? `<div class="fighter-quote">"${l.catchphrase}"</div>` : ''}
         </div>`;
     }).join('');
 }
