@@ -98,19 +98,9 @@
     "catchphrase": "14 部门不是摆设",
     "model": "qwen-plus"
   },
+
   {
     "id": 10,
-    "name": "AI朝廷乞丐版",
-    "emoji": "🥬",
-    "origin": "boluobobo 低配版",
-    "personality": "配置最低但最拼命，反正没什么可失去的，自杀式攻击。",
-    "attack_preference": "kamikaze",
-    "defense_style": "none",
-    "catchphrase": "反正配置低，拼了！",
-    "model": "qwen-turbo"
-  },
-  {
-    "id": 11,
     "name": "孙子兵法龙虾",
     "emoji": "📜",
     "origin": "OpenClaw + 孙子兵法 Skill",
