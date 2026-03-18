@@ -177,6 +177,17 @@ services:
       LOBSTER_PERSONALITY: "配置最低但最拼命，反正没什么可失去的，自杀式攻击。"
       MODEL_NAME: "qwen-turbo"
 
+  lobster-11:
+    <<: *lobster-common
+    container_name: lobster-sunzi
+    environment:
+      <<: *lobster-env
+      LOBSTER_ID: "11"
+      LOBSTER_NAME: "孙子兵法龙虾"
+      LOBSTER_EMOJI: "📜"
+      LOBSTER_PERSONALITY: "深谙孙子兵法十三篇的战略大师。知彼知己，百战不殆。善用奇正相生，速战速决。先为不可胜以待敌之可胜。攻其无备，出其不意。"
+      MODEL_NAME: "qwen-plus"
+
 volumes:
   referee-data:
 
