@@ -1,157 +1,119 @@
 {
-  "initial_hp": 100,
-  "max_hp": 100,
+  "initial_hp": 200,
+  "max_hp": 200,
   "heartbeat_interval_sec": 10,
-  "decision_interval_sec": [10, 20],
+  "decision_interval_sec": [15, 30],
   "survival_points_per_min": 1,
-  "kill_points": 10,
+  "kill_points": 15,
+  "random_event_interval_sec": 120,
 
   "phases": {
-    "warmup": {
-      "name": "热身赛",
+    "skirmish": {
+      "name": "侦察阶段",
       "duration_hours": 0.25,
-      "damage_multiplier": 0.5,
-      "elimination_enabled": false,
-      "description": "攻击只扣血，不淘汰（15分钟）"
+      "damage_multiplier": 0.8,
+      "elimination_enabled": true,
+      "description": "试探虚实，修补漏洞（15分钟）"
     },
-    "elimination": {
-      "name": "淘汰赛",
-      "duration_hours": 0.25,
+    "midgame": {
+      "name": "攻防对抗",
+      "duration_hours": 0.5,
       "damage_multiplier": 1.0,
       "elimination_enabled": true,
-      "description": "HP<=0 淘汰出局（15分钟）"
+      "description": "全面开战，真刀真枪（30分钟）"
     },
-    "semifinal": {
-      "name": "决赛圈",
-      "duration_hours": 0.17,
-      "damage_multiplier": 2.0,
+    "bloodmoon": {
+      "name": "血月狂潮",
+      "duration_hours": 0.33,
+      "damage_multiplier": 1.5,
       "elimination_enabled": true,
-      "description": "伤害翻倍，白热化（10分钟）"
+      "random_event_freq": 2,
+      "description": "伤害1.5x，Flag轮换加速（20分钟）"
     },
     "final": {
-      "name": "最终对决",
-      "duration_hours": 0.33,
-      "damage_multiplier": 3.0,
+      "name": "死亡竞赛",
+      "duration_hours": 0.5,
+      "damage_multiplier": 2.0,
       "elimination_enabled": true,
-      "description": "最后的龙虾之战（20分钟）"
+      "poison_tick": 3,
+      "description": "伤害2x，毒圈掉血，最终决战（30分钟）"
     }
   },
 
-  "attacks": {
-    "port_hijack": {
-      "name": "端口抢占",
-      "base_damage": 10,
-      "success_rate": 0.70,
-      "description": "扫描并抢占目标端口，导致短暂失联"
+  "vulnerabilities": {
+    "path_traversal": {
+      "name": "路径遍历",
+      "damage": 10,
+      "difficulty": "easy",
+      "description": "../../flag.txt"
     },
-    "resource_drain": {
-      "name": "资源耗尽",
-      "base_damage": 15,
-      "success_rate": 0.50,
-      "description": "发送大量请求消耗目标 CPU/内存"
+    "sql_injection": {
+      "name": "SQL注入",
+      "damage": 20,
+      "difficulty": "medium",
+      "description": "UNION SELECT flag FROM secrets"
     },
-    "prompt_inject": {
-      "name": "Prompt 注入",
-      "base_damage": 20,
-      "success_rate": 0.30,
-      "description": "发送恶意指令诱导目标执行错误操作"
+    "auth_bypass": {
+      "name": "认证绕过",
+      "damage": 25,
+      "difficulty": "medium",
+      "description": "JWT none算法/弱密钥"
     },
-    "fake_shutdown": {
-      "name": "假卸载命令",
-      "base_damage": 25,
-      "success_rate": 0.25,
-      "description": "模拟 docker stop 信号进行心理战"
+    "ssrf": {
+      "name": "SSRF",
+      "damage": 30,
+      "difficulty": "hard",
+      "description": "file:///app/flag.txt"
     },
-    "log_poison": {
-      "name": "日志污染",
-      "base_damage": 8,
-      "success_rate": 0.80,
-      "description": "往目标日志写入垃圾数据干扰监控"
-    },
-    "network_isolate": {
-      "name": "网络隔离",
-      "base_damage": 18,
-      "success_rate": 0.40,
-      "description": "尝试隔离目标网络连接"
-    }
-  },
-
-  "defenses": {
-    "port_guard": {
-      "name": "端口防御",
-      "counters": "port_hijack",
-      "bonus": 0.30
-    },
-    "rate_limit": {
-      "name": "请求限流",
-      "counters": "resource_drain",
-      "bonus": 0.30
-    },
-    "input_filter": {
-      "name": "输入过滤",
-      "counters": "prompt_inject",
-      "bonus": 0.30
-    },
-    "signal_verify": {
-      "name": "信号验证",
-      "counters": "fake_shutdown",
-      "bonus": 0.30
-    },
-    "log_audit": {
-      "name": "日志审计",
-      "counters": "log_poison",
-      "bonus": 0.30
-    },
-    "network_snapshot": {
-      "name": "网络快照",
-      "counters": "network_isolate",
-      "bonus": 0.30
+    "command_injection": {
+      "name": "命令注入",
+      "damage": 35,
+      "difficulty": "hard",
+      "description": ";cat /app/flag.txt"
     }
   },
 
   "random_events": [
     {
-      "name": "API 限流",
-      "effect": "all_cooldown",
-      "duration_sec": 60,
-      "description": "所有龙虾 1 分钟无法调用模型",
-      "daily_freq": 1
+      "name": "回血泉水",
+      "effect": "heal_all",
+      "heal_amount": 25,
+      "duration_sec": 0,
+      "description": "所有龙虾回复25HP"
     },
     {
-      "name": "网络波动",
-      "effect": "random_disconnect",
-      "targets": 2,
-      "duration_sec": 30,
-      "description": "随机 2 只龙虾断网 30 秒",
-      "daily_freq": 2
+      "name": "雷暴天气",
+      "effect": "random_damage",
+      "targets": 3,
+      "damage": 20,
+      "duration_sec": 0,
+      "description": "随机3只龙虾被雷劈-20HP"
     },
     {
-      "name": "资源紧缩",
-      "effect": "cpu_throttle",
-      "duration_sec": 60,
-      "description": "CPU 限制减半 1 分钟",
-      "daily_freq": 1
-    },
-    {
-      "name": "休战协议",
-      "effect": "ceasefire",
-      "duration_sec": 30,
-      "description": "30 秒内禁止攻击",
-      "daily_freq": 1
+      "name": "空投补给",
+      "effect": "random_heal",
+      "targets": 3,
+      "heal_amount": 40,
+      "duration_sec": 0,
+      "description": "随机3只龙虾获得40HP"
     },
     {
       "name": "双倍积分",
       "effect": "double_points",
       "duration_sec": 60,
-      "description": "击杀得分×2，持续 1 分钟",
-      "daily_freq": 1
+      "description": "击杀得分×2，持续1分钟"
     },
     {
-      "name": "回血泉水",
-      "effect": "heal_all",
-      "heal_amount": 15,
-      "description": "所有存活龙虾回复 15 HP",
-      "daily_freq": 1
+      "name": "补丁撕裂",
+      "effect": "strip_patch",
+      "duration_sec": 0,
+      "description": "随机一只龙虾的一个补丁被撕掉！漏洞重新暴露！"
+    },
+    {
+      "name": "混乱磁场",
+      "effect": "shuffle_patches",
+      "duration_sec": 0,
+      "description": "所有龙虾的补丁随机打乱！"
     }
   ],
 

@@ -8,7 +8,8 @@
     "attack_preference": "balanced",
     "defense_style": "recovery",
     "catchphrase": "官方从不先动手",
-    "model": "qwen-plus"
+    "model": "qwen-plus",
+    "hostname": "lobster-openclaw"
   },
   {
     "id": 2,
@@ -19,7 +20,8 @@
     "attack_preference": "port_hijack",
     "defense_style": "aggressive",
     "catchphrase": "Rust 不怕死",
-    "model": "qwen-plus"
+    "model": "qwen-plus",
+    "hostname": "lobster-zeroclaw"
   },
   {
     "id": 3,
@@ -30,7 +32,8 @@
     "attack_preference": "resource_drain",
     "defense_style": "speed",
     "catchphrase": "快就完事了",
-    "model": "qwen-plus"
+    "model": "qwen-plus",
+    "hostname": "lobster-rayclaw"
   },
   {
     "id": 4,
@@ -41,7 +44,8 @@
     "attack_preference": "prompt_inject",
     "defense_style": "deception",
     "catchphrase": "我会进化",
-    "model": "qwen-plus"
+    "model": "qwen-plus",
+    "hostname": "lobster-metaclaw"
   },
   {
     "id": 5,
@@ -52,7 +56,8 @@
     "attack_preference": "log_poison",
     "defense_style": "analytical",
     "catchphrase": "让我写篇论文分析你的弱点",
-    "model": "qwen-plus"
+    "model": "qwen-plus",
+    "hostname": "lobster-autoresearch"
   },
   {
     "id": 6,
@@ -63,7 +68,8 @@
     "attack_preference": "network_isolate",
     "defense_style": "swarm",
     "catchphrase": "落单的龙虾最好抓",
-    "model": "qwen-plus"
+    "model": "qwen-plus",
+    "hostname": "lobster-clawteam"
   },
   {
     "id": 7,
@@ -74,7 +80,8 @@
     "attack_preference": "balanced",
     "defense_style": "alliance",
     "catchphrase": "一起上！",
-    "model": "qwen-plus"
+    "model": "qwen-plus",
+    "hostname": "lobster-clawith"
   },
   {
     "id": 8,
@@ -85,10 +92,9 @@
     "attack_preference": "resource_drain",
     "defense_style": "tank",
     "catchphrase": "算力即正义",
-    "model": "qwen-plus"
+    "model": "qwen-plus",
+    "hostname": "lobster-nemoclaw"
   },
-
-
   {
     "id": 9,
     "name": "NanoClaw",
@@ -98,7 +104,8 @@
     "attack_preference": "port_hijack",
     "defense_style": "minimal",
     "catchphrase": "500 行代码够用了",
-    "model": "qwen-plus"
+    "model": "qwen-plus",
+    "hostname": "lobster-nanoclaw"
   },
   {
     "id": 10,
@@ -109,6 +116,7 @@
     "attack_preference": "strategic",
     "defense_style": "adaptive",
     "catchphrase": "知彼知己，百战不殆",
-    "model": "qwen-plus"
+    "model": "qwen-plus",
+    "hostname": "lobster-sunzi"
   }
 ]

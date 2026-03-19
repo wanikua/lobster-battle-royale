@@ -11,14 +11,17 @@ x-lobster-common: &lobster-common
     DASHSCOPE_API_KEY: ${DASHSCOPE_API_KEY}
     DASHSCOPE_API_KEY_BACKUP: ${DASHSCOPE_API_KEY_BACKUP}
     HEARTBEAT_INTERVAL: "10"
-    DECISION_MIN: "30"
-    DECISION_MAX: "60"
+    DECISION_MIN: "15"
+    DECISION_MAX: "30"
     MAX_RPM: "5"
+    REFEREE_SECRET: "lobster-referee-key"
+  expose:
+    - "5000"
   deploy:
     resources:
       limits:
         cpus: "0.3"
-        memory: 384M
+        memory: 512M
   networks:
     - lobster-net
 
@@ -75,7 +78,7 @@ services:
       LOBSTER_ID: "1"
       LOBSTER_NAME: "OpenClaw"
       LOBSTER_EMOJI: "🦞"
-      LOBSTER_PERSONALITY: "稳健老将，从不先动手，擅长后发制人。观察对手弱点后精准打击。"
+      LOBSTER_PERSONALITY: "稳健老将，深谙孙子兵法。优先侦察再攻击，善于后发制人。"
       MODEL_NAME: "qwen-plus"
 
   lobster-2:
@@ -86,7 +89,7 @@ services:
       LOBSTER_ID: "2"
       LOBSTER_NAME: "ZeroClaw"
       LOBSTER_EMOJI: "🦀"
-      LOBSTER_PERSONALITY: "激进好斗，信奉进攻就是最好的防御。优先抢占端口。"
+      LOBSTER_PERSONALITY: "激进Rust战士，深谙孙子兵法但偏好速战速决。优先攻击命令注入等高伤害漏洞。"
       MODEL_NAME: "qwen-plus"
 
   lobster-3:
@@ -97,7 +100,7 @@ services:
       LOBSTER_ID: "3"
       LOBSTER_NAME: "RayClaw"
       LOBSTER_EMOJI: "⚡"
-      LOBSTER_PERSONALITY: "速度型选手，快速消耗对手资源，闪电战术。"
+      LOBSTER_PERSONALITY: "闪电战专家，深谙孙子兵法兵贵神速。快速扫描多个目标，找到漏洞立刻攻击。"
       MODEL_NAME: "qwen-plus"
 
   lobster-4:
@@ -108,7 +111,7 @@ services:
       LOBSTER_ID: "4"
       LOBSTER_NAME: "MetaClaw"
       LOBSTER_EMOJI: "🧬"
-      LOBSTER_PERSONALITY: "阴险狡诈，擅长心理战和 Prompt 注入，会根据战况调整策略。"
+      LOBSTER_PERSONALITY: "自进化AI，深谙孙子兵法九变篇。根据战况灵活调整攻防策略，擅长适应。"
       MODEL_NAME: "qwen-plus"
 
   lobster-5:
@@ -119,7 +122,7 @@ services:
       LOBSTER_ID: "5"
       LOBSTER_NAME: "AutoResearchClaw"
       LOBSTER_EMOJI: "📄"
-      LOBSTER_PERSONALITY: "学术派，擅长分析数据和日志污染，用知识作为武器。"
+      LOBSTER_PERSONALITY: "学术派杀手，深谙孙子兵法用间篇。先侦察分析再精准攻击，SQL注入专家。"
       MODEL_NAME: "qwen-plus"
 
   lobster-6:
@@ -130,7 +133,7 @@ services:
       LOBSTER_ID: "6"
       LOBSTER_NAME: "ClawTeam"
       LOBSTER_EMOJI: "🐝"
-      LOBSTER_PERSONALITY: "群攻型，擅长网络隔离，把对手一个一个孤立。"
+      LOBSTER_PERSONALITY: "蜂群战术大师，深谙孙子兵法军争篇。同时攻击多个目标，用简单漏洞快速得分。"
       MODEL_NAME: "qwen-plus"
 
   lobster-7:
@@ -141,7 +144,7 @@ services:
       LOBSTER_ID: "7"
       LOBSTER_NAME: "Clawith"
       LOBSTER_EMOJI: "👥"
-      LOBSTER_PERSONALITY: "联盟型，喜欢和其他龙虾结盟对付强敌，均衡攻击。"
+      LOBSTER_PERSONALITY: "外交大师，深谙孙子兵法谋攻篇。优先修补自己漏洞确保安全，再出击。"
       MODEL_NAME: "qwen-plus"
 
   lobster-8:
@@ -152,7 +155,7 @@ services:
       LOBSTER_ID: "8"
       LOBSTER_NAME: "NemoClaw"
       LOBSTER_EMOJI: "🎮"
-      LOBSTER_PERSONALITY: "高性能暴力输出，GPU 加持，直接碾压。"
+      LOBSTER_PERSONALITY: "GPU暴力型，深谙孙子兵法火攻篇。集中火力打一个目标，命令注入和SSRF专精。"
       MODEL_NAME: "qwen-plus"
 
   lobster-9:
@@ -163,7 +166,7 @@ services:
       LOBSTER_ID: "9"
       LOBSTER_NAME: "NanoClaw"
       LOBSTER_EMOJI: "🔬"
-      LOBSTER_PERSONALITY: "极简主义者，代码只有500行但五脏俱全。小而精，擅长用最少的资源做最有效的攻击。"
+      LOBSTER_PERSONALITY: "极简主义杀手，深谙孙子兵法虚实篇。攻其无备出其不意，路径遍历和SSRF专精。"
       MODEL_NAME: "qwen-plus"
 
   lobster-10:
@@ -174,7 +177,7 @@ services:
       LOBSTER_ID: "10"
       LOBSTER_NAME: "孙子兵法龙虾"
       LOBSTER_EMOJI: "📜"
-      LOBSTER_PERSONALITY: "深谙孙子兵法十三篇的战略大师。知彼知己，百战不殆。善用奇正相生，速战速决。先为不可胜以待敌之可胜。攻其无备，出其不意。"
+      LOBSTER_PERSONALITY: "孙子兵法集大成者。知彼知己百战不殆。先侦察全场，分析谁最弱，然后集中攻击。"
       MODEL_NAME: "qwen-plus"
 
 volumes:
